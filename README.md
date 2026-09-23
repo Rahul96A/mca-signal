@@ -1,5 +1,6 @@
 # MCA Signal — Indian Company Intelligence
 
+[![CI](https://github.com/Rahul96A/mca-signal/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/Rahul96A/mca-signal/actions/workflows/ci.yml)
 [![Live demo](https://img.shields.io/badge/live%20demo-online-2ea44f?logo=microsoftazure&logoColor=white)](https://mca-signal.mangoground-b0b92773.centralindia.azurecontainerapps.io)
 [![Deployed on Azure Container Apps](https://img.shields.io/badge/deployed%20on-Azure%20Container%20Apps-0078D4?logo=microsoftazure&logoColor=white)](https://learn.microsoft.com/azure/container-apps/)
 [![Next.js 16](https://img.shields.io/badge/Next.js-16-000000?logo=nextdotjs&logoColor=white)](https://nextjs.org)
