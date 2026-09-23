@@ -1,5 +1,16 @@
 # MCA Signal — Indian Company Intelligence
 
+[![Live demo](https://img.shields.io/badge/live%20demo-online-2ea44f?logo=microsoftazure&logoColor=white)](https://mca-signal.mangoground-b0b92773.centralindia.azurecontainerapps.io)
+[![Deployed on Azure Container Apps](https://img.shields.io/badge/deployed%20on-Azure%20Container%20Apps-0078D4?logo=microsoftazure&logoColor=white)](https://learn.microsoft.com/azure/container-apps/)
+[![Next.js 16](https://img.shields.io/badge/Next.js-16-000000?logo=nextdotjs&logoColor=white)](https://nextjs.org)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![Data: data.gov.in](https://img.shields.io/badge/data-data.gov.in%20%28GODL%29-f58220)](https://www.data.gov.in/resource/registrars-companies-roc-wise-company-master-data)
+
+**Live deployment:** https://mca-signal.mangoground-b0b92773.centralindia.azurecontainerapps.io
+— runs in live mode against the official data.gov.in company register (Azure Container Apps, Central India).
+It scales to zero when idle, so the first request after a quiet period takes a few seconds, and lookups can be
+temporarily unavailable when data.gov.in rate-limits the configured API key.
+
 Research Indian private limited companies and LLPs by **company name, CIN, LLPIN, DIN or director name** and get a
 provenance-tracked intelligence report: profile, filings timeline, financial analysis, charges, director network,
 due-diligence signals and a cited AI report, exportable to PDF/CSV and shareable by link.
@@ -50,7 +61,7 @@ Services: `app` (Next.js on :3000, runs migrations on start), `postgres` (16, wi
 |---|---|
 | `DATA_GOV_API_KEY` | Free key from data.gov.in. Enables official company/LLP master data. |
 | `DATA_GOV_SYNC_STATES` | e.g. `karnataka,maharashtra` — states the worker bulk-imports for local fuzzy search |
-| `MCA_PROVIDER`, `MCA_PROVIDER_BASE_URL`, `MCA_PROVIDER_API_KEY`, `MCA_PROVIDER_API_SECRET` | Licensed third-party provider for directors, filings, financials, charges (`sandbox` or `generic`) |
+| `MCA_PROVIDER`, `MCA_PROVIDER_API_KEY` (+ `MCA_PROVIDER_BASE_URL`, `MCA_PROVIDER_API_SECRET`, `PROBE42_ENV`) | Licensed third-party provider: `probe42` (financial statements, directors, charges), `attestr` (directors, charges, e-filings, fuzzy name search), `sandbox` (master data) or `generic` (your own adapter) |
 | `OPENAI_API_KEY`, `OPENAI_MODEL` | Optional LLM narrative for the report (rule-based narrative otherwise) |
 | `DATABASE_URL` | PostgreSQL connection string (PGlite used when empty) |
 | `REDIS_URL` | Redis cache (in-process LRU when empty) |
@@ -97,7 +108,7 @@ Services (src/lib/services) ── entity resolution, search, network, report, e
    │            │
    │            └─ Analysis (src/lib/analysis): financials · risk signals · data quality · fuzzy match
    ▼
-Provider registry (src/lib/providers) ── DataGovProvider · ThirdPartyMcaProvider · DemoProvider
+Provider registry (src/lib/providers) ── DataGov · Probe42 · Attestr · Generic/Sandbox · Demo
    ▼                                        (same contract; swap without touching the frontend)
 Normalised DB (src/lib/db) ── PostgreSQL / PGlite, provenance on every row  +  cache (Redis / LRU)
 ```
